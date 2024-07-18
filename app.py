@@ -3,11 +3,7 @@ from datetime import datetime
 
 app = Flask(__name__)           # All required classes and functions imported. Flask file defined
 app.secret_key = '1234@$'       # secret added for the sake of syntax
-# def load_users():
-#     f = open('users.json', 'r')
-#     users = json.load(f)
-#     f.close()
-#     return users
+
 def load_users():
     file = open("user.json" , "r")
     users = json.load(file)
@@ -15,6 +11,12 @@ def load_users():
     return users
 
 USERS = load_users()            # admin users loaded from json file
+
+def login_validation(username, password):
+    if USERS.get(username) == password:
+        session["username"] = username
+        return True
+    return False                # if both username and password are correct return true
 
 if __name__ == '__main__':      #part of the flask format
     app.run(debug=True)
