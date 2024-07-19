@@ -90,7 +90,23 @@ def register():
     
     return render_template("register.html", flash_message=get_flashed_messages())
 
+@app.route("/dashboard", methods=["GET"])
+def dashboard():
+    username_in_session = False         #here we need to chheck if the user is in session
+    for key in session.keys():
+        if key == "username":
+            username_in_session = True
+            break
 
+    if username_in_session:                     # As the user is in session, we need to load the respective users events
+        events = get_events(session["username"])
+        return render_template("dashboard.html", events=events, username=session["username"])
+    return redirect("/login")
+
+@app.route("/logout", methods=["GET"])
+def logout():
+    session.pop("username", None)
+    return redirect("/")
 
                           
 if __name__ == "__main__":      #part of the flask format

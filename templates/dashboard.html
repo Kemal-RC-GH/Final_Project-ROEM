@@ -3,10 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROEM - Dashboard</title>
+    <title>Admin Dashboard</title>
     <link rel="stylesheet" href="../static/style.css">
 </head>
 <body>
-    <h1>ROEM - Event Management - Dashboard</h1>
+    <h1>Envents Managing Page</h1>
+    <div class="container">
+        <h2>Welcome <span id="dashboard-user"></span>!</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Event ID</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in events %}
+                <tr id="event-row-{{ event.id }}">
+                    <td>{{ event.id }}</td>
+                    <td>{{ event.title }}</td>
+                    <td>{{ event.description }}</td>
+                    <td>{{ event.date }}</td>
+                    <td>
+                        <button onclick="location.href='/edit_event/{{ event.id }}'">Edit</button>
+                        <button onclick="location.href='/delete_event/{{ event.id }}'">Delete</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <button onclick="location.href='/create_event'">Create Event</button>
+        <button onclick="location.href='/logout'">Logout</button>
+    </div>
 </body>
 </html>
+
