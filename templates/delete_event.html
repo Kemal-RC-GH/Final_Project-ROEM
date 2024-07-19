@@ -3,10 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delete</title>
+    <title>Delete Event</title>
     <link rel="stylesheet" href="../static/style.css">
 </head>
 <body>
-    <h1>ROEM - Event Management - Delete Event</h1>
+    <h1>ROEM - Event Deleting Page</h1>
+    <div class="container">
+        <h2>Delete Event</h2>
+        <p>Are you sure you want to delete the following event?</p>
+        <p>Event ID: {{ event.id }}</p>
+        <p>Title: {{ event.title }}</p>
+        <p>Description: {{ event.description }}</p>
+        <p>Date: {{ event.date }}</p>
+        <form method="POST" action="{{ url_for('delete_event', event_id=event.id) }}">
+            <button type="submit">Delete</button>
+        </form>
+        <div>
+            {% for message in get_flashed_messages() %}
+            <p class="error-message">{{ message }}</p>
+            {% endfor %}
+        </div>
+        <a href="/dashboard">Back to Dashboard</a>
+    </div>
 </body>
 </html>

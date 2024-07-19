@@ -64,6 +64,18 @@ def update_event(event):
         file.write(line)
     file.close()
 
+def delete_event_from_file(event_id):
+    events = get_events(session["username"])
+    for i, e in enumerate(events):
+        if e["id"] == event_id:
+            del events[i]
+            break
+    
+    file = open("events.txt", "w")
+    for e in events:
+        file.write("{},{},{},{}\n".format(e["id"], e["title"], e["description"], e["date"]))
+    file.close()
+
 
 @app.route("/", methods=["GET"])
 def index():
@@ -148,7 +160,7 @@ def create_event():
 
         if is_event_available(session_username, date_str, event_id) == False:
             flash("Event already exists for this date!")                            # call event availability function to aviod duplication
-            return render_template("edit_event.html", event_id=event_id, flash_message=get_flashed_messages())   
+            return render_template("create_event.html", event_id=event_id, flash_message=get_flashed_messages())   
 
         new_event = {"id": event_id, "title": username + title, "description": description, "date": date_str}
         save_event(new_event)                                       # save new event using save_event function to the text file
@@ -192,6 +204,25 @@ def edit_event(event_id):
 
     flash("Method not allowed")
     return redirect("/dashboard")
+
+@app.route("/delete_event/<string:event_id>", methods=["GET", "POST"])
+def delete_event(event_id):
+    if "username" not in session:
+        return redirect("/login")
+
+    if request.method == "GET":
+        event = next((e for e in get_events(session["username"]) if e["id"] == event_id), None)
+        if event:
+            return render_template("delete_event.html", event=event, flash_message=get_flashed_messages())
+        else:
+            flash("Event not found!")
+            return redirect("/dashboard", flash_message=get_flashed_messages())
+
+    elif request.method == "POST":
+        success = delete_event_from_file(event_id)  # Call the function to delete from file
+        if not success:
+            flash("Error deleting event!")
+            return redirect("/dashboard")
 
 @app.route("/logout", methods=["GET"])
 def logout():
