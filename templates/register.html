@@ -7,11 +7,6 @@
 </head>
 <body>
     <h1>ROEM - Registeration Page</h1>
-    <div>
-        {% if flash_message %}
-        <p class="positive_message">{{ flash_message }}</p>
-        {% endif %}
-    </div>
     <div class="container">
         <h2>Register</h2>
         <form method="post" action="{{ url_for('register') }}">
@@ -26,6 +21,11 @@
             <br>
             <button type="submit">Register</button>
         </form>
+        <div>
+            {% for message in get_flashed_messages() %}
+            <p class="error-message">{{ message }}</p>
+            {% endfor %}
+        </div>
     </div>
 </body>
 </html>

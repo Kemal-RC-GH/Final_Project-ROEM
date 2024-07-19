@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, session, redirect, flash, get_flashed_messages, json
-#from datetime import datetime
+from datetime import datetime
 
 app = Flask(__name__)           # All required classes and functions imported. Flask file defined
 app.secret_key = "1234@$"       # secret added for the sake of syntax
@@ -26,19 +26,31 @@ def login_validation(username, password):
 
 def get_events(username):
     events = []                 #initialize empty event
-    
+
     try:
         file = open("events.txt" , "r")
         for line in file:
             event_parts = line.strip().split(",")
             if len(event_parts) == 4:
                 event_id, title, description, date = event_parts 
-                if username == title.split("_")[0]: 
+                if username == title.split("-")[0]: 
                     events.append({"id": event_id, "title": title, "description" : description, "date": date})            # title of the event and its username split
         file.close()
     except FileNotFoundError:                   # if file is currupt or have problems
         print("event.txt file not found!")
     return events                               # we get the event now
+
+def save_event(event):
+    file = open("events.txt", "a")
+    file.write(event["id"] + "," + event["title"] + "," + event["description"] + "," + event["date"] + "\n")
+    file.close()                            # events created should be saved in the events.txt file
+
+def is_event_available(username, date_str):
+    events = get_events(username)
+    for event in events:
+        if event["date"] == date_str:
+            return False
+    return True                             # Here we check the availability of the event on the same date to avoid duplication
 
 @app.route("/", methods=["GET"])
 def index():
@@ -54,7 +66,7 @@ def login():
         password = request.form["password"]
         users = load_users()
         user_password = users.get(username)
-        if user_password and user_password == password:
+        if user_password and user_password == password:     # Here we check availabilty of user password and then we compare it to stored password
             session["username"] = username
             return redirect("/dashboard")
         flash("Invalid username or password!")
@@ -67,13 +79,13 @@ def register():
         password = request.form["password"]
         confirm_password = request.form["confirm_password"]
 
-        if password != confirm_password:
+        if password != confirm_password:                    # password confiramation
             flash("Passwords do not match!")
             return render_template("register.html", flash_message=get_flashed_messages())
 
-        users = load_users()          # Here we are going to check ifvthe username exists
+        users = load_users()          
         username_exists = False
-        for key in users.keys():
+        for key in users.keys():                # Here we are going to check if the username exists
             if key == username:
                 username_exists = True
                 break
@@ -103,9 +115,37 @@ def dashboard():
         return render_template("dashboard.html", events=events, username=session["username"])
     return redirect("/login")
 
+@app.route("/create_event", methods=["GET", "POST"])
+def create_event():
+    try:
+        session_username = session["username"]           # check wether the username is in session
+    except KeyError:
+        return redirect("/login")
+
+    if request.method == "POST":                        # post the form for the user
+        title = request.form["title"].strip()
+        description = request.form["description"].strip()
+        date_str = request.form["date"].strip()
+        username = session_username + "-"
+        event_id = str(datetime.now().timestamp()).split(".")[0]   # generate unique event ids and this the python module used
+
+        if title == "" or description == "" or date_str == "":
+            flash("Please fill all fields!")                        # if user tried to create event without providing required infos
+            return render_template("create_event.html", flash_message=get_flashed_messages())
+
+        if is_event_available(session_username, date_str) == False:
+            flash("Event already exists for this date!")            # call event availability function to aviod duplication
+            return render_template("create_event.html", flash_message=get_flashed_messages())
+
+        new_event = {"id": event_id, "title": username + title, "description": description, "date": date_str}
+        save_event(new_event)                                       # save new event using save_event function to the text file
+        return redirect("/dashboard")
+    
+    return render_template("create_event.html", flash_message=get_flashed_messages())
+
 @app.route("/logout", methods=["GET"])
 def logout():
-    session.pop("username", None)
+    session.pop("username", None)                       #  here session is stopped and redirected to the index page
     return redirect("/")
 
                           
