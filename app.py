@@ -45,12 +45,25 @@ def save_event(event):
     file.write(event["id"] + "," + event["title"] + "," + event["description"] + "," + event["date"] + "\n")
     file.close()                            # events created should be saved in the events.txt file
 
-def is_event_available(username, date_str):
+def is_event_available(username, date_str, event_id=None):
     events = get_events(username)
-    for event in events:
-        if event["date"] == date_str:
+    for event in events:                                                # event id should also be checked to allow editting 
+        if event["date"] == date_str and (event_id is None or event["id"] != event_id):
             return False
-    return True                             # Here we check the availability of the event on the same date to avoid duplication
+    return True                                                     # Here we check the availability of the event on the same date to avoid duplication
+
+def update_event(event):
+    events = get_events(session["username"])
+    for i, e in enumerate(events):
+        if e["id"] == event["id"]:
+            events[i] = event
+            break
+    file = open("events.txt", "w")
+    for e in events:
+        line = "{},{},{},{}\n".format(e["id"], e["title"], e["description"], e["date"])
+        file.write(line)
+    file.close()
+
 
 @app.route("/", methods=["GET"])
 def index():
@@ -133,15 +146,52 @@ def create_event():
             flash("Please fill all fields!")                        # if user tried to create event without providing required infos
             return render_template("create_event.html", flash_message=get_flashed_messages())
 
-        if is_event_available(session_username, date_str) == False:
-            flash("Event already exists for this date!")            # call event availability function to aviod duplication
-            return render_template("create_event.html", flash_message=get_flashed_messages())
+        if is_event_available(session_username, date_str, event_id) == False:
+            flash("Event already exists for this date!")                            # call event availability function to aviod duplication
+            return render_template("edit_event.html", event_id=event_id, flash_message=get_flashed_messages())   
 
         new_event = {"id": event_id, "title": username + title, "description": description, "date": date_str}
         save_event(new_event)                                       # save new event using save_event function to the text file
         return redirect("/dashboard")
     
-    return render_template("create_event.html", flash_message=get_flashed_messages())
+    return render_template("create_event.html")
+
+@app.route("/edit_event/<string:event_id>", methods=["GET", "POST"])
+def edit_event(event_id):
+    try:
+        session_username = session["username"]                  # check wether the username is in session
+    except KeyError:                                    
+        return redirect("/login")
+
+    if request.method == "GET":                                     # get the updates from the user
+        events = get_events(session_username)
+        event = next((e for e in events if e["id"] == event_id), None)  # loops in the events list and finds the event to compare it with the event id
+        if event:
+            return render_template("edit_event.html", event=event)
+        else:
+            flash("Event not found!")
+            return redirect("/dashboard")
+
+    elif request.method == "POST":
+        title = request.form["title"].strip()
+        description = request.form["description"].strip()
+        date_str = request.form["date"].strip()
+        username = session_username + "-"
+
+        if title == "" or description == "" or date_str == "":
+            flash("Please fill all fields!")                                # if user tried to create event without providing required infos
+            return render_template("edit_event.html", event_id=event_id, flash_message=get_flashed_messages())
+
+        if is_event_available(session_username, date_str, event_id) == False:
+            flash("Event already exists for this date!")
+            return render_template("edit_event.html", event_id=event_id, flash_message=get_flashed_messages())
+
+        updated_event = {"id": event_id, "title": username + title, "description": description, "date": date_str}
+        update_event(updated_event)                                         # save edited event using update_event function to the text file
+        return redirect("/dashboard")
+
+    flash("Method not allowed")
+    return redirect("/dashboard")
 
 @app.route("/logout", methods=["GET"])
 def logout():
