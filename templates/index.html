@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROEM</title>
+</head>
+<body>
+    <h1>Refugee Organizations Events Manager (ROEM)</h1><br><br>
+    <div class="sayings" id="paragraph">
+        <p>"The best events are the ones where everything is perfectly planned but feels effortlessly spontaneous."</p>
+        <p>"Success is where preparation and opportunity meet."</p>
+        <p>The goal of a successful event is to make sure everyone leaves with a smile and a memory."</p>
+        <p>"Event planning is not just about logistics; it's about creating moments that people will remember for a lifetime."</p>
+        <p>"An event is a success when people leave feeling that they've had a truly memorable experience."</p>
+    </div>
+    <br>
+    <div class="container">
+        <form method="get" action="{{ url_for('login') }}">
+            <button type="submit">Login</button>
+        </form>
+        <form method="get" action="{{ url_for('register') }}">
+            <button type="submit">Register</button>
+        </form>
+    </div>
+</body>
+</body>
+</html>
