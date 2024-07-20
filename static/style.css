@@ -1,11 +1,9 @@
 body {
-    color: #000000;
-    font-family: Arial, sans-serif;
-    background-image: url(/static/background-image.jpg);
+    background-image: url(/static/Event-Information-Horizontal.jpg) ;
     background-repeat: no-repeat;  
     background-position: center;  
     background-size: cover;      
-     
+    
       
   }
 

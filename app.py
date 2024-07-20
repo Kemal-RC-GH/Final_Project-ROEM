@@ -7,7 +7,7 @@ app.secret_key = "1234@$"       # secret added for the sake of syntax
 
 class Users:
     
-    def __init__(self, users_file_path):
+    def __init__(self, users_file_path):    # properties of the class defined
         self.users_file_path = users_file_path
         self.USERS = self.load_users()
 
@@ -42,11 +42,11 @@ def get_events(username):
             if len(event_parts) == 4:
                 event_id, title, description, date = event_parts 
                 if username == title.split("-")[0]: 
-                    events.append({"id": event_id, "title": title, "description" : description, "date": date})            # title of the event and its username split
-        file.close()
-    except FileNotFoundError:                   # if file is currupt or have problems
-        print("event.txt file not found!")
-    return events                               # we get the event now
+                    events.append({"id": event_id, "title": title, "description" : description, "date": date}) 
+        file.close()                # title of the event and its username split
+    except FileNotFoundError:                   
+        print("events.txt file not found!")    # if file is currupt or have problems
+    return events                # we get the event now
 
 def save_event(event):
     file = open("events.txt", "a")
@@ -55,14 +55,14 @@ def save_event(event):
 
 def is_event_available(username, date_str, event_id=None):
     events = get_events(username)
-    for event in events:                                                # event id should also be checked to allow editting 
+    for event in events:       # event id should also be checked to allow editting 
         if event["date"] == date_str and (event_id is None or event["id"] != event_id):
             return False
-    return True                                                     # Here we check the availability of the event on the same date to avoid duplication
+    return True    # Here we check the availability of the event on the same date to avoid duplication
 
 def update_event(event):
     events = get_events(session["username"])
-    for i, e in enumerate(events):
+    for i, e in enumerate(events):              
         if e["id"] == event["id"]:
             events[i] = event
             break
@@ -73,7 +73,7 @@ def update_event(event):
     file.close()
 
 def delete_event_from_file(event_id):
-    events = get_events(session["username"])
+    events = get_events(session["username"]) # here event is delated from text file using write
     for i, e in enumerate(events):
         if e["id"] == event_id:
             del events[i]
@@ -99,7 +99,7 @@ def login():
         password = request.form["password"]
         users = users_instance.USERS
         user_password = users.get(username)
-        if user_password and user_password == password:     # Here we check availabilty of user password and then we compare it to stored password
+        if user_password and user_password == password:  # Here we check availabilty of user password and then we compare it to stored password
             session["username"] = username
             return redirect("/dashboard")
         flash("Invalid username or password!")
@@ -130,7 +130,7 @@ def register():
         users[username] = password   # build the new dictionary
         users_instance.save_users(users)            # save it to the json file using save_user function
         session["username"] = username # update session for direct login and flash the below message
-        flash("Registration successful! Please log in.")
+        
         return redirect("/dashboard")
     
     return render_template("register.html", flash_message=get_flashed_messages())
@@ -163,15 +163,15 @@ def create_event():
         event_id = str(datetime.now().timestamp()).split(".")[0]   # generate unique event ids and this the python module used
 
         if title == "" or description == "" or date_str == "":
-            flash("Please fill all fields!")                        # if user tried to create event without providing required infos
+            flash("Please fill all fields!")          # if user tried to create event without providing required infos
             return render_template("create_event.html", flash_message=get_flashed_messages())
 
         if is_event_available(session_username, date_str, event_id) == False:
-            flash("Event already exists for this date!")                            # call event availability function to aviod duplication
+            flash("Event already exists for this date!")       # call event availability function to aviod duplication
             return render_template("create_event.html", event_id=event_id, flash_message=get_flashed_messages())   
 
         new_event = {"id": event_id, "title": username + title, "description": description, "date": date_str}
-        save_event(new_event)                                       # save new event using save_event function to the text file
+        save_event(new_event)        # save new event using save_event function to the text file
         return redirect("/dashboard")
     
     return render_template("create_event.html")
@@ -199,7 +199,7 @@ def edit_event(event_id):
         username = session_username + "-"
 
         if title == "" or description == "" or date_str == "":
-            flash("Please fill all fields!")                                # if user tried to create event without providing required infos
+            flash("Please fill all fields!")      # if user tried to create event without providing required infos
             return render_template("edit_event.html", event_id=event_id, flash_message=get_flashed_messages())
 
         if is_event_available(session_username, date_str, event_id) == False:
@@ -207,7 +207,7 @@ def edit_event(event_id):
             return render_template("edit_event.html", event_id=event_id, flash_message=get_flashed_messages())
 
         updated_event = {"id": event_id, "title": username + title, "description": description, "date": date_str}
-        update_event(updated_event)                                         # save edited event using update_event function to the text file
+        update_event(updated_event)       # save edited event using update_event function to the text file
         return redirect("/dashboard")
 
     flash("Method not allowed")
