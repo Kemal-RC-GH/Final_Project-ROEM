@@ -229,7 +229,6 @@ def delete_event(event_id):
     elif request.method == "POST":
         success = delete_event_from_file(event_id)  # Call the function to delete from file
         if not success:
-            flash("Error deleting event!")
             return redirect("/dashboard")
 
 @app.route("/logout", methods=["GET"])

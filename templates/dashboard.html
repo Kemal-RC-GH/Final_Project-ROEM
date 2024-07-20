@@ -30,7 +30,7 @@
                     <td>{{ event.description }}</td>
                     <td>{{ event.date }}</td>
                     <td>
-                        <button onclick="location.href='/edit_event/{{ event.id }}'">Edit</button>
+                        <button onclick="location.href='/edit_event/{{ event.id }}'">&nbsp;&nbsp;Edit&nbsp;&nbsp;</button><br><br>
                         <button onclick="location.href='/delete_event/{{ event.id }}'">Delete</button>
                     </td>
                 </tr>
@@ -38,8 +38,11 @@
             </tbody>
         </table>
         <br>
+        <div style="display: inline-block;">
         <button onclick="location.href='/create_event'">Create Event</button>
         <button onclick="location.href='/logout'">Logout</button>
+        </div>
+        
     </div>
     <script src="../static/welcome_admin.js"></script>
 </body>
