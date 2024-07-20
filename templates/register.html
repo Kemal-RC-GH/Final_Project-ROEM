@@ -22,6 +22,7 @@
             <br>
             <button type="submit">Register</button>
         </form>
+        <button onclick="location.href='/login'">Login</button>
         <div>
             {% for message in get_flashed_messages() %}
             <p class="error-message">{{ message }}</p>

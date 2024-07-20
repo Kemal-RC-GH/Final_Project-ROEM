@@ -4,26 +4,34 @@ from datetime import datetime
 app = Flask(__name__)           # All required classes and functions imported. Flask file defined
 app.secret_key = "1234@$"       # secret added for the sake of syntax
 
-users_file_path = "users.json"
-def load_users():
-    file = open(users_file_path , "r")
-    users = json.load(file)
-    file.close()
-    return users
 
-def save_users(user):
-    file = open(users_file_path, "w")
-    json.dump(user, file)
-    file.close()                        # registered users are saved in the users.json file    
+class Users:
+    
+    def __init__(self, users_file_path):
+        self.users_file_path = users_file_path
+        self.USERS = self.load_users()
 
-USERS = load_users()            # admin users loaded from json file
+
+    def load_users(self):   # admin users loaded from json file
+        file = open(self.users_file_path, "r")
+        users = json.load(file)
+        file.close()
+        return users
+
+    def save_users(self, users):
+        file = open(self.users_file_path, "w")
+        json.dump(users, file)
+        file.close() 
+
+users_instance = Users("users.json") # Initialize Users instance
 
 def login_validation(username, password):
-    if USERS.get(username) == password:
+    users = users_instance.USERS
+    if users.get(username) == password:
         session["username"] = username
-        return True
-    return False                # if both username and password are correct return true
-
+        return True          # if both username and password are correct return true
+    return False
+                    
 def get_events(username):
     events = []                 #initialize empty event
 
@@ -89,7 +97,7 @@ def login():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        users = load_users()
+        users = users_instance.USERS
         user_password = users.get(username)
         if user_password and user_password == password:     # Here we check availabilty of user password and then we compare it to stored password
             session["username"] = username
@@ -108,7 +116,7 @@ def register():
             flash("Passwords do not match!")
             return render_template("register.html", flash_message=get_flashed_messages())
 
-        users = load_users()          
+        users = users_instance.USERS          
         username_exists = False
         for key in users.keys():                # Here we are going to check if the username exists
             if key == username:
@@ -120,10 +128,10 @@ def register():
             return render_template("register.html", flash_message=get_flashed_messages())
       
         users[username] = password   # build the new dictionary
-        save_users(users)            # save it to the json file using save_user function
+        users_instance.save_users(users)            # save it to the json file using save_user function
         session["username"] = username # update session for direct login and flash the below message
         flash("Registration successful! Please log in.")
-        return redirect("/login")
+        return redirect("/dashboard")
     
     return render_template("register.html", flash_message=get_flashed_messages())
 
@@ -207,7 +215,7 @@ def edit_event(event_id):
 
 @app.route("/delete_event/<string:event_id>", methods=["GET", "POST"])
 def delete_event(event_id):
-    if "username" not in session:
+    if "username" not in session:      
         return redirect("/login")
 
     if request.method == "GET":

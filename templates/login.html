@@ -17,10 +17,12 @@
             <input type="password" id="password" name="password" required>
             <button type="submit">Login</button>
         </form>
+        <button onclick="location.href='/register'">Sign up</button>
         <div>
             {% for message in get_flashed_messages() %}
             <p class="error-message">{{ message }}</p>
             {% endfor %}
         </div>
+    <script src="../static/local_storage.js"></script>
 </body>
 </html>
