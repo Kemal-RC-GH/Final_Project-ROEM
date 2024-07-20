@@ -6,21 +6,21 @@
 
 ✅ It uses at least one module from the Python Standard Library other than the random module. Please provide the name of the module you are using in your app.
 
-      Module name: Datetime
+      Module names: Datetime, JSON
       
 ✅ It contains at least one class written by you that has both properties and methods. It uses __init__() to let the class initialize the object's attributes (note that __init__() doesn't count as a method).
 
-This includes instantiating the class and using the methods in your app. Please provide below the file name and the line number(s) of at least one example of a class definition in your code as well as the         names of two properties and two methods.
+This includes instantiating the class and using the methods in your app. Please provide below the file name and the line number(s) of at least one example of a class definition in your code as well as the names of two properties and two methods.
 
     File name for the class definition: app.py > class Users 
     
-    Line number(s) for the class definition: from line 8 to line 27
+    Line number(s) for the class definition: from line 7 to line 23
     
     Name of two properties: self.users_file_path = users_file_path, self.USERS = self.load_users(), 
     
-    Name of two methods: USERS, save_users.....
+    Name of two methods: USERS or load_users, save_users.....
     
-    File name and line numbers where the methods are used: USERS (line 29 and 100), save_users(line 131)....
+    File name and line numbers where the methods are used: USERS (line 26 and 94), save_users(line 125)....
     
 ✅ It makes use of JavaScript in the front end and uses the localStorage of the web browser.
 
@@ -32,15 +32,15 @@ This includes instantiating the class and using the methods in your app. Please 
 
         File name: local_Storag.js
         
-        Line number(s): 5
+        Line number(s): 3 and 12
       
 ✅ It contains loops. Please provide below the file name and the line number(s) of at least one example of a loop in your code.
 
         File name: app.py
 
-        Line number(s): 40, 65, 70, 77 ....
+        Line number(s): 36, 54, 61, 66, 73, 78 ....
 
-✅ It lets the user enter a value in a text box at some point. login and register This value is received and processed by your back end Python code.
+✅ It lets the user enter a value in a text box at some point. login and register. This value is received and processed by your back end Python code.
 
 ✅ It doesn't generate any error message even if the user enters a wrong input.
 
