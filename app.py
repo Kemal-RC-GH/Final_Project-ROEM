@@ -187,6 +187,7 @@ def edit_event(event_id):
         events = get_events(session_username)
         event = next((e for e in events if e["id"] == event_id), None)  # loops in the events list and finds the event to compare it with the event id
         if event:
+            event["title"] = event["title"].replace(session_username + "-", "")  # Remove username from the title for editing
             return render_template("edit_event.html", event=event)
         else:
             flash("Event not found!")
