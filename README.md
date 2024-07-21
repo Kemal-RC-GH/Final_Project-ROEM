@@ -12,15 +12,15 @@
 
 This includes instantiating the class and using the methods in your app. Please provide below the file name and the line number(s) of at least one example of a class definition in your code as well as the names of two properties and two methods.
 
-    File name for the class definition: app.py > class Users 
+    File name for the class definition: utility.py > class Users 
     
-    Line number(s) for the class definition: from line 7 to line 23
+    Line number(s) for the class definition: from line 3 to line 19
     
     Name of two properties: self.users_file_path = users_file_path, self.USERS = self.load_users(), 
     
     Name of two methods: USERS or load_users, save_users.....
     
-    File name and line numbers where the methods are used: USERS (line 26 and 94), save_users(line 125)....
+    File name and line numbers where the methods are used: routes.py > USERS (line 46), save_users(line 52)....
     
 ✅ It makes use of JavaScript in the front end and uses the localStorage of the web browser.
 
@@ -32,13 +32,13 @@ This includes instantiating the class and using the methods in your app. Please 
 
         File name: local_Storag.js
         
-        Line number(s): 3 and 12
+        Line number(s): 4 and 12
       
 ✅ It contains loops. Please provide below the file name and the line number(s) of at least one example of a loop in your code.
 
-        File name: app.py
+        File name: utility.py
 
-        Line number(s): 36, 54, 61, 66, 73, 78 ....
+        Line number(s): 40, 59, 66  ....
 
 ✅ It lets the user enter a value in a text box at some point. login and register. This value is received and processed by your back end Python code.
 
@@ -76,12 +76,17 @@ This is a Flask application that allows admin users of refugee organizations in 
 
 ✅ Flask framework
 
+        pip install Flask
+
+
 # Installation:
 
 ✅ Clone this repository.
 
 ✅ Run the application:
-    python app.py
+
+        flask --app app.py --run
+        flask --app app.py --debug run
 
 # Project Structure:
 
@@ -105,9 +110,11 @@ This is a Flask application that allows admin users of refugee organizations in 
 
 # Getting Started:
 
+    🔻 Run the flask:  flask --app app.py --debug run
+
     🔻 Visit http://127.0.0.1:5000/ in your web browser.
     
-    🔻 Login using the default credentials (if you haven't modified them).
+    🔻 Register and Login using the default credentials (if you haven't modified them).
     
     🔻 Explore the functionalities to create, edit, and manage your events.
 

@@ -1,7 +1,7 @@
 const dashboardUser = document.getElementById('dashboard-user'); // here we get the dashboard user element
 
 const user = localStorage.getItem('name'); // here we get the user name from localStorage
-console.log(user);
+
 
 if (dashboardUser) {
     dashboardUser.innerHTML = user;
