@@ -1,22 +1,6 @@
-from flask import session, json
+from flask import session
+from utility.users import users_instance
 import re
-class Users:
-    def __init__(self, users_file_path):    # properties of the class defined
-        self.users_file_path = users_file_path
-        self.USERS = self.load_users()
-
-    def load_users(self):   # admin users loaded from json file
-        file = open(self.users_file_path, "r")
-        users = json.load(file)
-        file.close()
-        return users
-
-    def save_users(self, users):
-        file = open(self.users_file_path, "w")
-        json.dump(users, file)
-        file.close()
-
-users_instance = Users("users.json") # Initialize Users instance
 
 def login_validation(username, password):
     # Validate login credentials
@@ -33,6 +17,7 @@ def is_valid_password(password):
         return False
     return True
 
+
 def get_events(username):
     events = []                 # initialize empty event list
     try:
@@ -42,7 +27,6 @@ def get_events(username):
             if len(event_parts) == 4:
                 event_id, title, description, date = event_parts 
                 if username == title.split("-")[0]: 
-                    title = "-".join(title.split("-")[1:])
                     events.append({"id": event_id, "title": title, "description": description, "date": date}) 
         file.close()
     except FileNotFoundError:                   

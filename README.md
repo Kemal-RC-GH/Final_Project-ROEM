@@ -12,7 +12,7 @@
 
 This includes instantiating the class and using the methods in your app. Please provide below the file name and the line number(s) of at least one example of a class definition in your code as well as the names of two properties and two methods.
 
-    File name for the class definition: utility.py > class Users 
+    File name for the class definition: utility/users.py 
     
     Line number(s) for the class definition: from line 3 to line 19
     
@@ -20,7 +20,8 @@ This includes instantiating the class and using the methods in your app. Please 
     
     Name of two methods: USERS or load_users, save_users.....
     
-    File name and line numbers where the methods are used: routes.py > USERS (line 46), save_users(line 52)....
+    File name and line numbers where the methods are used:      routes/handlers.py > save_users (line 63), 
+                                                                utility/functions.py > USERS (line 7)....
     
 ✅ It makes use of JavaScript in the front end and uses the localStorage of the web browser.
 
@@ -30,15 +31,15 @@ This includes instantiating the class and using the methods in your app. Please 
 
 ✅ It contains conditional statements. Please provide below the file name and the line number(s) of at least one example of a conditional statement in your code.
 
-        File name: local_Storag.js
+        File name: static/local_Storag.js
         
         Line number(s): 4 and 12
       
 ✅ It contains loops. Please provide below the file name and the line number(s) of at least one example of a loop in your code.
 
-        File name: utility.py
+        File name: utility/functions.py 
 
-        Line number(s): 40, 59, 66  ....
+        Line number(s): 25, 43, 50, 55 ....
 
 ✅ It lets the user enter a value in a text box at some point. login and register. This value is received and processed by your back end Python code.
 
@@ -46,7 +47,7 @@ This includes instantiating the class and using the methods in your app. Please 
 
 ✅ It has styles using CSS.
 
-✅ The code follows the code and style conventions as introduced in the course, is fully documented using comments and doesn't contain unused or experimental code. In particular, the code should not use              print() or console.log() for any information the app user should see. Instead, all user feedback needs to be visible in the browser.
+✅ The code follows the code and style conventions as introduced in the course, is fully documented using comments and doesn't contain unused or experimental code. In particular, the code should not use print() or console.log() for any information the app user should see. Instead, all user feedback needs to be visible in the browser.
 
 ✅ All exercises have been completed as per the requirements and pushed to the respective GitHub repository.
 
@@ -72,7 +73,9 @@ This is a Flask application that allows admin users of refugee organizations in 
 
 # Requirements:
 
-✅ Python 3
+✅ Download: Python 3
+
+        python --version
 
 ✅ Flask framework
 
@@ -90,13 +93,22 @@ This is a Flask application that allows admin users of refugee organizations in 
 
 # Project Structure:
 
-✅ app.py: Main Flask application file containing routes and logic.
+✅ app.py: Main Flask application calling the registered_routes.
+
+✅ routes: 
+                __init__.py: initializes the routes
+                handlers.py: file containing all route functions
+                routes.py: file containing register_routes function
+
+✅ utility: 
+                users.py: supporting file containing users class
+                functions.py: support file containing events operations
 
 ✅ templates: Folder containing HTML templates for different pages (e.g., login, dashboard, etc.).
 
 ✅ static: Folder containing static assets:
 
-✅ style.css: Stylesheet for the website's appearance.
+✅ style.css and index_style.css : Stylesheet for the website's appearance.
 
 ✅ scripts (min_date.js, local_storage.js and welcome_admin.js): Custom JavaScript code for interactivity.
 
